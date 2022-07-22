@@ -27,7 +27,7 @@ public class AdminController {
     public void block(
             @PathVariable("userId") Long userId
     ) {
-        userService.block(userId);
+        userService.ban(userId);
     }
 
     @DeleteMapping("/users/{userId}/delete")

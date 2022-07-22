@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changeset/2022-07-21-0911-create-user-table.yaml
   - include:
       file: db/changelog/changeset/2022-07-21-0919-create-note-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-22-1630-drop-user-table-is-banned-column.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-22-1633-add-user-table-is-banned-column.yaml

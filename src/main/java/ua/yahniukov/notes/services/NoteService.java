@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.yahniukov.notes.data.NoteRequest;
 import ua.yahniukov.notes.exceptions.NoteNotFoundException;
-import ua.yahniukov.notes.mappers.NoteMapper;
 import ua.yahniukov.notes.models.dto.NoteDto;
 import ua.yahniukov.notes.models.entities.NoteEntity;
 import ua.yahniukov.notes.repositories.NoteRepository;
@@ -37,26 +36,31 @@ public class NoteService {
     }
 
     public NoteDto get(Long noteId) {
-        var note = findById(noteId);
-        return NoteMapper.INSTANCE.toDTO(note);
+        return NoteDto.fromNote(findById(noteId));
     }
 
     public List<NoteDto> getAll(Long userId) {
         var user = userService.findById(userId);
-        var notes = noteRepository.findAllByUser(user);
-        return NoteMapper.INSTANCE.toDTOList(notes);
+        return noteRepository
+                .findAllByUser(user)
+                .stream()
+                .map(NoteDto::fromNote)
+                .toList();
     }
 
-    public void update(Long noteId, NoteRequest updatedNote) {
-        var note = findById(noteId);
-        NoteMapper.INSTANCE.updateNoteFromRequest(updatedNote, note);
-        noteRepository.save(note);
-    }
+    //public void update(Long noteId, NoteRequest updatedNote) {
+    //var note = findById(noteId);
+    //NoteMapper.INSTANCE.updateNoteFromRequest(updatedNote, note);
+    //noteRepository.save(note);
+    //}
 
     public List<NoteDto> searchByTitle(Long userId, String title) {
         var user = userService.findById(userId);
-        var notes = noteRepository.findAllByUserAndTitle(user, title);
-        return NoteMapper.INSTANCE.toDTOList(notes);
+        return noteRepository
+                .findAllByUserAndTitle(user, title)
+                .stream()
+                .map(NoteDto::fromNote)
+                .toList();
     }
 
     public void delete(Long userId, Long noteId) {

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-user-table-is-banned-column
+      author: Andrii Yahniukov
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: is_banned
+                  type: boolean
+                  constraints:
+                    nullable: false

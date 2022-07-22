@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ua.yahniukov.notes.data.UpdatePasswordRequest;
 import ua.yahniukov.notes.enums.UserRole;
 import ua.yahniukov.notes.exceptions.*;
-import ua.yahniukov.notes.mappers.UserMapper;
 import ua.yahniukov.notes.models.dto.UserDto;
 import ua.yahniukov.notes.models.entities.UserEntity;
 import ua.yahniukov.notes.repositories.UserRepository;
@@ -52,13 +51,15 @@ public class UserService {
     }
 
     public UserDto get(Long userId) {
-        var user = findById(userId);
-        return UserMapper.INSTANCE.toDTO(user);
+        return UserDto.fromUser(findById(userId));
     }
 
     public List<UserDto> getAll() {
-        List<UserEntity> users = userRepository.findAll();
-        return UserMapper.INSTANCE.toDTOList(users);
+        return userRepository
+                .findAll()
+                .stream()
+                .map(UserDto::fromUser)
+                .toList();
     }
 
     public void updatePassword(Long userId, UpdatePasswordRequest password) {
@@ -73,12 +74,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void block(Long userId) {
+    public void ban(Long userId) {
         var user = findById(userId);
         if (user.getRole().equals(UserRole.ADMIN)) {
             throw new AdminIsNotBlockException();
         }
-        user.setIsNotBlock(!user.getIsNotBlock());
+        user.setIsBanned(!user.getIsBanned());
         userRepository.save(user);
     }
 

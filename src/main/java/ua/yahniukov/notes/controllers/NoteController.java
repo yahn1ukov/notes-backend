@@ -43,7 +43,7 @@ public class NoteController {
         return noteService.getAll(userId);
     }
 
-    @GetMapping("/users/current")
+    @GetMapping
     @ApiOperation("Search a user's note by title")
     public List<NoteDto> searchByTitle(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId,
@@ -52,14 +52,14 @@ public class NoteController {
         return noteService.searchByTitle(userId, title);
     }
 
-    @PatchMapping("/{noteId}")
-    @ApiOperation("Update a note by id")
-    public void update(
-            @PathVariable("noteId") Long noteId,
-            @RequestBody NoteRequest updatedNote
-    ) {
-        noteService.update(noteId, updatedNote);
-    }
+    //@PatchMapping("/{noteId}")
+    //@ApiOperation("Update a note by id")
+    //public void update(
+    //      @PathVariable("noteId") Long noteId,
+    //    @RequestBody NoteRequest updatedNote
+    //) {
+    //  noteService.update(noteId, updatedNote);
+    //}
 
     @DeleteMapping("/{noteId}/users/current")
     @ApiOperation("Delete a user's note by id")

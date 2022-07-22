@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import ua.yahniukov.notes.exceptions.UnauthorizedException;
-import ua.yahniukov.notes.security.services.AuthService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
-    private final AuthService authService;
+    private final UserDetailsService userDetailsService;
     @Value("${jwt.token.header}")
     private String authorizationHeader;
     @Value("${jwt.token.prefix}")
@@ -58,7 +58,7 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        var user = authService.loadUserByUsername(getUsername(token.replace(String.format("%s ", tokenPrefix), "")));
+        var user = userDetailsService.loadUserByUsername(getUsername(token.replace(String.format("%s ", tokenPrefix), "")));
         return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 

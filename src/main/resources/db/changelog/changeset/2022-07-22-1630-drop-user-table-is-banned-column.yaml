@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-user-table-is-banned-column
+      author: Andrii Yahniukov
+      changes:
+        - dropColumn:
+            tableName: users
+            columnName: is_banned
