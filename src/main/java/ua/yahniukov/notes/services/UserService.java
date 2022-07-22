@@ -1,7 +1,6 @@
 package ua.yahniukov.notes.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.yahniukov.notes.data.UpdatePasswordRequest;
 import ua.yahniukov.notes.enums.UserRole;
@@ -10,6 +9,7 @@ import ua.yahniukov.notes.mappers.UserMapper;
 import ua.yahniukov.notes.models.dto.UserDto;
 import ua.yahniukov.notes.models.entities.UserEntity;
 import ua.yahniukov.notes.repositories.UserRepository;
+import ua.yahniukov.notes.security.configurations.EncoderConfiguration;
 import ua.yahniukov.notes.security.data.RegistrationRequest;
 
 import javax.transaction.Transactional;
@@ -20,7 +20,11 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final EncoderConfiguration passwordConfiguration;
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 
     public UserEntity findById(Long userId) {
         return userRepository
@@ -35,14 +39,14 @@ public class UserService {
     }
 
     public void create(RegistrationRequest registrationUser) {
-        if (userRepository.existsByUsername(registrationUser.username())) {
+        if (existsByUsername(registrationUser.username())) {
             throw new UserAlreadyExistsException();
         }
 
         userRepository.save(
                 UserEntity.builder()
                         .username(registrationUser.username())
-                        .password(passwordEncoder.encode(registrationUser.password()))
+                        .password(passwordConfiguration.passwordEncoder().encode(registrationUser.password()))
                         .build()
         );
     }
@@ -59,13 +63,13 @@ public class UserService {
 
     public void updatePassword(Long userId, UpdatePasswordRequest password) {
         var user = findById(userId);
-        if (!passwordEncoder.matches(password.oldPassword(), user.getPassword())) {
+        if (!passwordConfiguration.passwordEncoder().matches(password.oldPassword(), user.getPassword())) {
             throw new IncorrectPasswordException();
         }
         if (password.oldPassword().equals(password.newPassword())) {
             throw new SamePasswordException();
         }
-        user.setPassword(passwordEncoder.encode(password.newPassword()));
+        user.setPassword(passwordConfiguration.passwordEncoder().encode(password.newPassword()));
         userRepository.save(user);
     }
 

@@ -1,6 +1,7 @@
 package ua.yahniukov.notes.controllers;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UserController {
     @GetMapping("/current")
     @ApiOperation("Get a user by id")
     public UserDto get(
-            @RequestAttribute("userId") Long userId
+            @ApiParam(hidden = true) @RequestAttribute("userId") Long userId
     ) {
         return userService.get(userId);
     }
@@ -26,7 +27,7 @@ public class UserController {
     @PatchMapping("/current/update/password")
     @ApiOperation("Change a user's password by id")
     public void updatePassword(
-            @RequestAttribute("userId") Long userId,
+            @ApiParam(hidden = true) @RequestAttribute("userId") Long userId,
             @RequestBody UpdatePasswordRequest password
     ) {
         userService.updatePassword(userId, password);
@@ -35,7 +36,7 @@ public class UserController {
     @DeleteMapping("/current/delete")
     @ApiOperation("Delete a user by id")
     public void delete(
-            @RequestAttribute("userId") Long userId
+            @ApiParam(hidden = true) @RequestAttribute("userId") Long userId
     ) {
         userService.delete(userId);
     }

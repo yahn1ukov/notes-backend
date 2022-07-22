@@ -20,9 +20,9 @@ public class UserEntity extends BaseEntity {
 
     private String password;
 
-    @Column(name = "is_not_block")
+    @Column(name = "is_banned")
     @Builder.Default
-    private Boolean isNotBlock = false;
+    private Boolean isBanned = false;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
