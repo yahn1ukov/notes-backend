@@ -21,10 +21,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final EncoderConfiguration passwordConfiguration;
 
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
     public UserEntity findById(Long userId) {
         return userRepository
                 .findById(userId)
@@ -38,16 +34,20 @@ public class UserService {
     }
 
     public void create(RegistrationRequest registrationUser) {
-        if (existsByUsername(registrationUser.username())) {
+        if (userRepository.existsByUsername(registrationUser.username())) {
             throw new UserAlreadyExistsException();
         }
 
-        userRepository.save(
-                UserEntity.builder()
-                        .username(registrationUser.username())
-                        .password(passwordConfiguration.passwordEncoder().encode(registrationUser.password()))
-                        .build()
-        );
+        var createdUser = UserEntity.builder()
+                .username(registrationUser.username())
+                .password(passwordConfiguration.passwordEncoder().encode(registrationUser.password()))
+                .build();
+
+        if (!userRepository.existsByRole(UserRole.ADMIN)) {
+            createdUser.setRole(UserRole.ADMIN);
+        }
+
+        userRepository.save(createdUser);
     }
 
     public UserDto get(Long userId) {

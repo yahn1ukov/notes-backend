@@ -23,7 +23,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "is_banned")
     @Builder.Default
     private Boolean isBanned = false;
-
+    
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private UserRole role = UserRole.USER;

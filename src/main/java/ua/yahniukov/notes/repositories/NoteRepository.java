@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     List<NoteEntity> findAllByUser(UserEntity user);
-
-    List<NoteEntity> findAllByUserAndTitle(UserEntity user, String title);
 }

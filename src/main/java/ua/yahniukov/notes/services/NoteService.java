@@ -48,19 +48,15 @@ public class NoteService {
                 .toList();
     }
 
-    //public void update(Long noteId, NoteRequest updatedNote) {
-    //var note = findById(noteId);
-    //NoteMapper.INSTANCE.updateNoteFromRequest(updatedNote, note);
-    //noteRepository.save(note);
-    //}
-
-    public List<NoteDto> searchByTitle(Long userId, String title) {
-        var user = userService.findById(userId);
-        return noteRepository
-                .findAllByUserAndTitle(user, title)
-                .stream()
-                .map(NoteDto::fromNote)
-                .toList();
+    public void update(Long noteId, NoteRequest updatedNote) {
+        var note = findById(noteId);
+        if (updatedNote.title() != null) {
+            note.setTitle(updatedNote.title());
+        }
+        if (updatedNote.text() != null) {
+            note.setText(updatedNote.text());
+        }
+        noteRepository.save(note);
     }
 
     public void delete(Long userId, Long noteId) {

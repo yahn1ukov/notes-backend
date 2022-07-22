@@ -20,7 +20,9 @@ import javax.persistence.Table;
 @SuperBuilder
 public class NoteEntity extends BaseEntity {
     private String title;
+
     private String text;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
