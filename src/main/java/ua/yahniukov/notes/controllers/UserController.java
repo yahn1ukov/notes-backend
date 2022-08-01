@@ -16,7 +16,7 @@ import ua.yahniukov.notes.services.UserService;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/current")
+    @GetMapping
     @ApiOperation("Get a user by id")
     public UserDto get(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId
@@ -24,7 +24,7 @@ public class UserController {
         return userService.get(userId);
     }
 
-    @PatchMapping("/current/update/password")
+    @PatchMapping("/password")
     @ApiOperation("Change a user's password by id")
     public void updatePassword(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId,
@@ -33,7 +33,7 @@ public class UserController {
         userService.updatePassword(userId, password);
     }
 
-    @DeleteMapping("/current/delete")
+    @DeleteMapping
     @ApiOperation("Delete a user by id")
     public void delete(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId

@@ -22,7 +22,7 @@ public class AdminController {
         return userService.getAll();
     }
 
-    @PatchMapping("/users/{userId}/block")
+    @PatchMapping("/users/{userId}")
     @ApiOperation("Block a user by id")
     public void block(
             @PathVariable("userId") Long userId
@@ -30,7 +30,7 @@ public class AdminController {
         userService.ban(userId);
     }
 
-    @DeleteMapping("/users/{userId}/delete")
+    @DeleteMapping("/users/{userId}")
     @ApiOperation("Delete a user by id")
     public void delete(
             @PathVariable("userId") Long userId

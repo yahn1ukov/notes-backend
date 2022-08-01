@@ -18,7 +18,7 @@ import java.util.List;
 public class NoteController {
     private final NoteService noteService;
 
-    @PostMapping("/users/current")
+    @PostMapping
     @ApiOperation("Create note")
     public void create(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId,
@@ -35,7 +35,7 @@ public class NoteController {
         return noteService.get(noteId);
     }
 
-    @GetMapping("/users/current")
+    @GetMapping
     @ApiOperation("Get list of user's notes")
     public List<NoteDto> getAll(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId
@@ -52,7 +52,7 @@ public class NoteController {
         noteService.update(noteId, updatedNote);
     }
 
-    @DeleteMapping("/{noteId}/users/current")
+    @DeleteMapping("/{noteId}")
     @ApiOperation("Delete a user's note by id")
     public void delete(
             @ApiParam(hidden = true) @RequestAttribute("userId") Long userId,
